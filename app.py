@@ -3,7 +3,7 @@ from routes import api
 import debugpy
 
 debugpy.listen(("127.0.0.1", 5678))
-print("✅ Debugger listening on 127.0.0.1:5678")
+print("Debugger listening on 127.0.0.1:5678")
 
 app = Flask(__name__)
 
