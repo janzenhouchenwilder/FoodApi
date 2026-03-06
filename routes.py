@@ -2,9 +2,9 @@ from flask import Blueprint, jsonify, request
 import requests
 from dataclasses import asdict
 from TokenModel import Token
-import FoodModel
-from auth import get_access_token, invalidate_token
+import FoodModel, RecipeModel
 import fatsecret_mapper, fatsecret_client 
+from utils.parse_dataclass import parse_dataclass
 
 api = Blueprint("api", __name__)
 
@@ -25,3 +25,8 @@ def food(food_name):
     data = fatsecret_mapper.handle_response_data(response)
     return jsonify(data.to_dict())
 
+@api.route("/recipe", methods=["POST"])
+def recipes():
+    data = parse_dataclass(RecipeModel.RecipesSearch)
+    response = fatsecret_client.search_recipes(data)
+    return jsonify(response)
