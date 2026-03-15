@@ -1,10 +1,10 @@
 import time
 import requests
-import config
 from threading import Lock
 from typing import Optional
 from TokenModel import Token
 import config
+from flask import current_app
 
 _token_cache: Optional[Token] = None
 _token_expires_at: float = 0.0
@@ -29,11 +29,13 @@ def get_access_token() -> Token:
         if _token_cache and now < _token_expires_at:
             return _token_cache
 
-        credentials = config.get_credentials()
+        client_id = current_app.config["CLIENT_ID"]
+        client_secret = current_app.config["CLIENT_SECRET"]
+        credentials = { client_id: client_secret }
 
         response = requests.post(
             "https://oauth.fatsecret.com/connect/token",
-            auth=(credentials["ClientId"], credentials["ClientSecret"]),
+            auth=(client_id, client_secret),
             data={"grant_type": "client_credentials"},
             headers={"Content-Type": "application/x-www-form-urlencoded"},
             timeout=20
