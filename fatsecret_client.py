@@ -5,6 +5,7 @@ import FoodModel, RecipeModel
 from auth import get_access_token, invalidate_token
 
 FATSECRET_SEARCH_URL = "https://platform.fatsecret.com/rest/foods/search/v1"
+FATSECRET_SEARCH_ID_URL = "https://platform.fatsecret.com/rest/food/v5"
 FATSECRET_RECIPE_URL = "https://platform.fatsecret.com/rest/recipes/search/v3"
 
 def search_foods(search_exp: str, max_results: int = 10) -> dict:
@@ -29,6 +30,35 @@ def search_foods(search_exp: str, max_results: int = 10) -> dict:
         token = get_access_token()
         resp = requests.get(
             FATSECRET_SEARCH_URL,
+            headers={"Authorization": f"{token.token_type} {token.access_token}"},
+            params=asdict(req),
+            timeout=20
+        )
+
+    resp.raise_for_status()
+    return resp.json()
+
+def search_food_by_id(food_id: str) -> dict:
+    token = get_access_token()
+
+    req = FoodModel.FoodSearchById(
+        method="food.get.v5",
+        food_id=food_id,
+        format="json"
+    )
+
+    resp = requests.get(
+        FATSECRET_SEARCH_ID_URL,
+        headers={"Authorization": f"{token.token_type} {token.access_token}"},
+        params=asdict(req),
+        timeout=20
+    )
+
+    if resp.status_code == 401:
+        invalidate_token()
+        token = get_access_token()
+        resp = requests.get(
+            FATSECRET_SEARCH_ID_URL,
             headers={"Authorization": f"{token.token_type} {token.access_token}"},
             params=asdict(req),
             timeout=20
