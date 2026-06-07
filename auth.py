@@ -10,6 +10,12 @@ _token_cache: Optional[Token] = None
 _token_expires_at: float = 0.0
 _lock = Lock()
 
+def validate_auth(auth_header: str) -> bool:
+    api_key = current_app.config["API_KEY"]
+    if api_key != auth_header:
+        return False
+    return True
+
 def get_access_token() -> Token:
     """
     Returns a cached OAuth token if valid.
