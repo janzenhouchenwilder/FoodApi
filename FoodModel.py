@@ -64,4 +64,53 @@ class FoodSearch:
     search_expression: str
     format: str
     max_results: int
+
+@dataclass
+class FoodSearchById:
+    method: str
+    food_id: str
+    format: str
+
+@dataclass
+class Serving:
+    calcium: str
+    calories: str
+    carbohydrate: str
+    cholesterol: str
+    fat: str
+    fiber: str
+    iron: str
+    measurement_description: str
+    metric_serving_amount: str
+    metric_serving_unit: str
+    monounsaturated_fat: str
+    number_of_units: str
+    polyunsaturated_fat: str
+    potassium: str
+    protein: str
+    saturated_fat: str
+    serving_description: str
+    serving_id: str
+    serving_url: str
+    sodium: str
+    sugar: str
+    vitamin_a: str
+    vitamin_c: str
+
+
+@dataclass
+class Servings:
+    serving: List[Serving]
+
+@dataclass
+class FoodIdDetail:
+    food_id: str
+    food_name: str
+    food_type: str
+    food_url: str
+    servings: Servings
+
+@dataclass
+class FoodIdSearchResponse:
+    food: Food
     

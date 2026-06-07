@@ -50,3 +50,24 @@ def handle_food_description(food_desc: str) -> FoodModel.FoodDescription:
         carbs=info.get("carbs", ""),
         protein=info.get("protein", ""),
     )
+
+def handle_response_data_by_id(json: {}) -> FoodModel.FoodRoot:
+    food_data = json["food"]
+    desc = handle_food_description(food_data["food_description"])
+    food = FoodModel.Food(
+            food_id=food_data["food_id"],
+            food_name=food_data["food_name"],
+            food_type=food_data["food_type"],
+            food_url=food_data["food_url"],
+            food_description=None
+        ).to_dict()
+    if "brand_name" in food_data:
+        food["brand_name"] = food_data["brand_name"]
+
+    return FoodModel.FoodRoot(
+        foods=FoodModel.Foods(food=[food], 
+                              max_results="1", 
+                              total_results="1", 
+                              page_number="1" 
+        )
+    )

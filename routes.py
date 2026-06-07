@@ -25,6 +25,17 @@ def food(food_name):
     data = fatsecret_mapper.handle_response_data(response)
     return jsonify(data.to_dict())
 
+@api.route("/food/id/<id>")
+def food_by_id(id):
+    brand = request.args.get("brand")
+    search_exp = id
+    if brand:
+        search_exp = f'{id} "{brand}"'
+
+    response = fatsecret_client.search_food_by_id(search_exp)
+#    data = fatsecret_mapper.handle_response_data_by_id(response)
+    return jsonify(response)
+
 @api.route("/recipe", methods=["POST"])
 def recipes():
     data = parse_dataclass(RecipeModel.RecipesSearch)
