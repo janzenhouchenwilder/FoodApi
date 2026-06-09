@@ -26,7 +26,6 @@ def require_api_key(fn):
 @api.route("/food/<food_name>")
 @require_api_key
 def food(food_name):
-    breakpoint()
     brand = request.args.get("brand")
     search_exp = food_name
     if brand:
