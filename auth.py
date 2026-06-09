@@ -27,7 +27,6 @@ def get_access_token() -> Token:
 
     if _token_cache and now < _token_expires_at:
         return _token_cache
-    breakpoint()
 
     # Prevent concurrent refreshes
     with _lock:
